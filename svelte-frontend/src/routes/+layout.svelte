@@ -70,7 +70,9 @@
 
 	const setupSocket = async (enableWebsocket) => {
 		// Native Rust Socket.IO on main backend port (8080)
-		const SOCKETIO_URL = import.meta.env.VITE_SOCKETIO_URL || `http://localhost:8080`;
+		// If VITE_SOCKETIO_URL is not set, use the current window origin (relative path)
+		// This allows the app to work on any domain without rebuilding, relying on the Nginx proxy
+		const SOCKETIO_URL = import.meta.env.VITE_SOCKETIO_URL || (typeof window !== 'undefined' ? window.location.origin : '') || `http://localhost:8080`;
 		const _socket = io(SOCKETIO_URL, {
 			reconnection: true,
 			reconnectionDelay: 1000,

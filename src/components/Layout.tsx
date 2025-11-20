@@ -54,7 +54,8 @@ export default function Layout() {
       socketRef.current.disconnect();
     }
 
-    const SOCKETIO_URL = import.meta.env.VITE_SOCKETIO_URL || `http://localhost:8080`;
+    // If VITE_SOCKETIO_URL is not set, use the current window origin (relative path)
+    const SOCKETIO_URL = import.meta.env.VITE_SOCKETIO_URL || (typeof window !== 'undefined' ? window.location.origin : '') || `http://localhost:8080`;
     
     const _socket = io(SOCKETIO_URL, {
       reconnection: true,
